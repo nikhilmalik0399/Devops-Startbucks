@@ -48,8 +48,8 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker build -t starbucks ."
-                       sh "docker tag starbucks aseemakram19/starbucks:latest "
-                       sh "docker push aseemakram19/starbucks:latest "
+                       sh "docker tag starbucks nikhilmalik0399/starbucks:latest "
+                       sh "docker push nikhilmalik0399/starbucks:latest "
                     }
                 }
             }
@@ -61,7 +61,7 @@ pipeline{
         }
         stage('App Deploy to Docker container'){
             steps{
-                sh 'docker run -d --name starbucks -p 3000:3000 aseemakram19/starbucks:latest'
+                sh 'docker run -d --name starbucks -p 3000:3000 nikhilmalik0399/starbucks:latest'
             }
         }
 
