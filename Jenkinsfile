@@ -63,8 +63,31 @@ pipeline{
             steps{
                 sh 'docker run -d --name starbucks -p 3000:3000 nikhilmalik99/starbucks:latest'
             }
-        }
+        } stage('Deploy to EKS Cluster') {
+            steps {
+                dir('kubernetes') {
+                script {
+                    sh '''
+                    echo "Verifying AWS credentials..."
+                    aws sts get-caller-identity
 
+                    echo "Configuring kubectl for EKS cluster..."
+                    aws eks update-kubeconfig --region ap-south-1 --name Cloudaseem
+
+                    echo "Verifying kubeconfig..."
+                    kubectl config view
+
+                    echo "Deploying application to EKS..."
+                    kubectl apply -f manifest.yml
+                    
+                    echo "Verifying deployment..."
+                    kubectl get pods
+                    kubectl get svc
+                    '''
+                }
+            }
+         }
+        }
     }
     post {
     always {
